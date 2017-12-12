@@ -10,6 +10,9 @@ class Movie(models.Model):
     length_minutes = models.IntegerField(blank=False)
     path = models.TextField(blank=False)
 
+    def __str__(self):
+        return self.title
+
 
 class Season(models.Model):
     title = models.CharField(max_length=250, blank=False)
@@ -18,3 +21,6 @@ class Season(models.Model):
     resolution = models.CharField(max_length=250, blank=False)
     date_added = models.DateField(blank=False)
     path = models.TextField(blank=False)
+
+    def __str__(self):
+        return self.title
