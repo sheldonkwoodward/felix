@@ -7,7 +7,7 @@ from datetime import datetime, date, timedelta
 
 def search_movie(movie_list, request):
     data = {
-        "time": "2000-01-01 00:00:00.000",
+        "time_stamp": "2000-01-01 00:00:00.000000",
         "num": 0,
         "movies": []
     }
@@ -44,7 +44,7 @@ def search_movie(movie_list, request):
         data['movies'].append(single_json)
 
     # results info
-    data['time'] = str(datetime.now())
+    data['time_stamp'] = str(datetime.now())
     data['num'] = len(data['movies'])
     return data
 
@@ -54,13 +54,25 @@ def movie_all(request):
     return JsonResponse(search_movie(movies, request))
 
 
-def movie_today(request):
-    oldest_date = date.today() - timedelta(days=1)
+def movie_days(request, days):
+    oldest_date = date.today() - timedelta(days=days)
     movies = Movie.objects.filter(date_added__gte=oldest_date)
     return JsonResponse(search_movie(movies, request))
 
 
-def movie_week(request):
-    oldest_date = date.today() - timedelta(days=7)
+def movie_weeks(request, weeks):
+    oldest_date = date.today() - timedelta(days=weeks * 7)
+    movies = Movie.objects.filter(date_added__gte=oldest_date)
+    return JsonResponse(search_movie(movies, request))
+
+
+def movie_months(request, months):
+    oldest_date = date.today() - timedelta(days=months * 31)
+    movies = Movie.objects.filter(date_added__gte=oldest_date)
+    return JsonResponse(search_movie(movies, request))
+
+
+def movie_years(request, years):
+    oldest_date = date.today() - timedelta(days=years * 365)
     movies = Movie.objects.filter(date_added__gte=oldest_date)
     return JsonResponse(search_movie(movies, request))
