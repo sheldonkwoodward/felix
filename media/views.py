@@ -7,8 +7,8 @@ from datetime import date, timedelta
 
 def search_movie(movie_list, request):
     data = {
-        "status": [],
-        "results": []
+        "num": 0,
+        "movies": []
     }
 
     for movie in movie_list:
@@ -40,7 +40,10 @@ def search_movie(movie_list, request):
             'length_minutes': movie.length_minutes,
             'path': movie.path,
         }
-        data['results'].append(single_json)
+        data['movies'].append(single_json)
+
+    # results info
+    data['num'] = len(data['movies'])
     return data
 
 
@@ -51,11 +54,11 @@ def movie_all(request):
 
 def movie_today(request):
     oldest_date = date.today() - timedelta(days=1)
-    movies = Movie.objects.all().filter(date_added__gte=oldest_date)
+    movies = Movie.objects.filter(date_added__gte=oldest_date)
     return JsonResponse(search_movie(movies, request))
 
 
 def movie_week(request):
     oldest_date = date.today() - timedelta(days=7)
-    movies = Movie.objects.all().filter(date_added__gte=oldest_date)
+    movies = Movie.objects.filter(date_added__gte=oldest_date)
     return JsonResponse(search_movie(movies, request))
