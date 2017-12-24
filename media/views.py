@@ -29,6 +29,8 @@ def search_movie(movie_list, season_list, request):
         elif request.GET.get('length_minutes') is not None and str(movie.length_minutes) != request.GET.get(
                 'length_minutes'):
             continue
+        elif request.GET.get('season') is not None:
+            continue
 
         single_json = {
             'id': movie.id,
@@ -44,15 +46,17 @@ def search_movie(movie_list, season_list, request):
 
     # find seasons
     for season in season_list:
-        if request.GET.get('id') is not None and str(movie.id) != request.GET.get('id'):
+        if request.GET.get('id') is not None and str(season.id) != request.GET.get('id'):
             continue
-        elif request.GET.get('title') is not None and movie.title not in request.GET.get('title'):
+        elif request.GET.get('title') is not None and season.title not in request.GET.get('title'):
             continue
-        elif request.GET.get('season') is not None and str(movie.release_year) != request.GET.get('season'):
+        elif request.GET.get('season') is not None and str(season.season) != request.GET.get('season'):
             continue
-        elif request.GET.get('cut') is not None and movie.cut not in request.GET.get('cut'):
+        elif request.GET.get('cut') is not None and season.cut not in request.GET.get('cut'):
             continue
-        elif request.GET.get('resolution') is not None and movie.resolution not in request.GET.get('resolution'):
+        elif request.GET.get('resolution') is not None and season.resolution not in request.GET.get('resolution'):
+            continue
+        elif request.GET.get('length_minutes') is not None:
             continue
 
         single_json = {
