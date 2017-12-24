@@ -1,20 +1,17 @@
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 
 from media.models import Movie, Season
 
-
-def index(request):
-    return HttpResponse("Media index.")
+from datetime import date, timedelta
 
 
-def query_movie(request):
-    all_movies = Movie.objects.all()
+def search_movie(movie_list, request):
     data = {
         "status": [],
         "results": []
     }
 
-    for movie in all_movies:
+    for movie in movie_list:
         # TODO: add status messages for bad queries
         # TODO: use for loop instead of if statements
         if request.GET.get('id') is not None and str(movie.id) != request.GET.get('id'):
@@ -44,12 +41,21 @@ def query_movie(request):
             'path': movie.path,
         }
         data['results'].append(single_json)
-    return JsonResponse(data)
+    return data
 
 
-# TODO: implement query_season
-def query_season(request):
-    return JsonResponse({
-        "status": [],
-        "results": []
-    })
+def movie_all(request):
+    movies = Movie.objects.all()
+    return JsonResponse(search_movie(movies, request))
+
+
+def movie_today(request):
+    oldest_date = date.today() - timedelta(days=1)
+    movies = Movie.objects.all().filter(date_added__gte=oldest_date)
+    return JsonResponse(search_movie(movies, request))
+
+
+def movie_week(request):
+    oldest_date = date.today() - timedelta(days=7)
+    movies = Movie.objects.all().filter(date_added__gte=oldest_date)
+    return JsonResponse(search_movie(movies, request))
