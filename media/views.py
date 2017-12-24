@@ -2,11 +2,12 @@ from django.http import JsonResponse
 
 from media.models import Movie, Season
 
-from datetime import date, timedelta
+from datetime import datetime, date, timedelta
 
 
 def search_movie(movie_list, request):
     data = {
+        "time": "2000-01-01 00:00:00.000",
         "num": 0,
         "movies": []
     }
@@ -43,6 +44,7 @@ def search_movie(movie_list, request):
         data['movies'].append(single_json)
 
     # results info
+    data['time'] = str(datetime.now())
     data['num'] = len(data['movies'])
     return data
 
