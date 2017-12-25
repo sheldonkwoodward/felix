@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from rest_framework.authentication import TokenAuthentication, SessionAuthentication, BasicAuthentication
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
 
@@ -87,7 +87,6 @@ def search_media(request, movie_list, season_list):
 @authentication_classes((TokenAuthentication,))
 @permission_classes((IsAuthenticated,))
 def media_all(request):
-    print('GET ALL MEDIA')
     movies = Movie.objects.all()
     seasons = Season.objects.all()
     return JsonResponse(search_media(request, movies, seasons))
