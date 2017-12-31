@@ -12,4 +12,5 @@ urlpatterns = [
     path('months/<int:months>', views.media_past_months, name='media_past_months'),
     path('years/<int:years>', views.media_past_years, name='media_past_years'),
     path('add/movie', views.media_add_movie, name='media_add_movie'),
+    path('add/season', views.media_add_season, name='media_add_season'),
 ]

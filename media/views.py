@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.permissions import IsAuthenticated
 
 from media.models import Movie, Season
-from media.MovieForm import MovieForm
+from media.forms import MovieForm, SeasonForm
 
 from datetime import datetime, date, timedelta
 
@@ -184,6 +184,37 @@ def media_add_movie(request):
             path=path,
         )
         movie.save()
+        return JsonResponse({
+            'status': 'success'
+        })
+    else:
+        return JsonResponse({
+            'status': 'failed'
+        })
+
+
+@api_view(['POST'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def media_add_season(request):
+    form = SeasonForm(request.POST)
+    if form.is_valid():
+        title = form.cleaned_data['title']
+        season = form.cleaned_data['season']
+        cut = form.cleaned_data['cut']
+        resolution = form.cleaned_data['resolution']
+        date_added = date.today()
+        path = form.cleaned_data['path']
+
+        season = Season.objects.create(
+            title=title,
+            season=season,
+            cut=cut,
+            resolution=resolution,
+            date_added=date_added,
+            path=path,
+        )
+        season.save()
         return JsonResponse({
             'status': 'success'
         })
