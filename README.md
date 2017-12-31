@@ -87,7 +87,7 @@ Returns all movies and seasons in the database that were added within the past \
 Returns all movies and seasons in the database that were added within the past \<years> years.
 
 
-### Media POST Request
+### Media POST Requests
 Media POST Requests return JSON objects in the following format:
 ```
 {
