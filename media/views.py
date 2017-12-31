@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.permissions import IsAuthenticated
 
 from media.models import Movie, Season
+from media.forms import MovieForm, SeasonForm
 
 from datetime import datetime, date, timedelta
 
@@ -157,3 +158,67 @@ def media_past_years(request, years):
     movies = Movie.objects.filter(date_added__gte=oldest_date)
     seasons = Season.objects.filter(date_added__gte=oldest_date)
     return JsonResponse(search_media(request, movies, seasons))
+
+
+@api_view(['POST'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def media_add_movie(request):
+    form = MovieForm(request.POST)
+    if form.is_valid():
+        title = form.cleaned_data['title']
+        release_year = form.cleaned_data['release_year']
+        cut = form.cleaned_data['cut']
+        resolution = form.cleaned_data['resolution']
+        date_added = date.today()
+        length_minutes = form.cleaned_data['length_minutes']
+        path = form.cleaned_data['path']
+
+        movie = Movie.objects.create(
+            title=title,
+            release_year=release_year,
+            cut=cut,
+            resolution=resolution,
+            date_added=date_added,
+            length_minutes=length_minutes,
+            path=path,
+        )
+        movie.save()
+        return JsonResponse({
+            'status': 'success'
+        })
+    else:
+        return JsonResponse({
+            'status': 'failed'
+        }, status=400)
+
+
+@api_view(['POST'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def media_add_season(request):
+    form = SeasonForm(request.POST)
+    if form.is_valid():
+        title = form.cleaned_data['title']
+        season = form.cleaned_data['season']
+        cut = form.cleaned_data['cut']
+        resolution = form.cleaned_data['resolution']
+        date_added = date.today()
+        path = form.cleaned_data['path']
+
+        season = Season.objects.create(
+            title=title,
+            season=season,
+            cut=cut,
+            resolution=resolution,
+            date_added=date_added,
+            path=path,
+        )
+        season.save()
+        return JsonResponse({
+            'status': 'success'
+        })
+    else:
+        return JsonResponse({
+            'status': 'failed'
+        }, status=400)
