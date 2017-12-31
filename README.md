@@ -27,7 +27,7 @@ $ python manage.py runserver
 
 
 ## Usage
-As of v1.0, this app can handle GET requests for movie or season info. It can also handle POST requests to add either of these to the database. All GET and POST requests require a Bearer token to be provided in the header. This token is automatically generated for every Django user and can be foud in <b>default.db</b> under the <b>authtoken_token</b> table. 
+As of v1.0, this app can handle GET requests for movie or season info. It can also handle POST requests to add either of these to the database. All GET and POST requests require a Bearer token to be provided in the header of the request. This token is automatically generated for every Django user and can be foud in <b>default.db</b> under the <b>authtoken_token</b> table. 
 
 ### Media GET Requests
 Media GET Requests return JSON objects in the following format:
@@ -93,7 +93,7 @@ Returns all movies and seasons in the database that were added within the past \
 
 
 ### Media POST Request
-Media GET Requests return JSON objects in the following format:
+Media POST Requests return JSON objects in the following format:
 ```
 {
     "status": SUCCESS OR FAILURE
