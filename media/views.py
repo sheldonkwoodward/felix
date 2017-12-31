@@ -190,7 +190,7 @@ def media_add_movie(request):
     else:
         return JsonResponse({
             'status': 'failed'
-        })
+        }, status=400)
 
 
 @api_view(['POST'])
@@ -221,4 +221,4 @@ def media_add_season(request):
     else:
         return JsonResponse({
             'status': 'failed'
-        })
+        }, status=400)
