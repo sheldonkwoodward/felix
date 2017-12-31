@@ -1,9 +1,4 @@
-# Felix
-v1.0
-
-Sheldon Woodward
-
-12/30/17
+# Felix v1.0
 
 
 ## Description
