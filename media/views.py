@@ -46,7 +46,8 @@ def search_media(request, movie_list, season_list):
             'release_year': movie.release_year,
             'cut': movie.cut,
             'resolution': movie.resolution,
-            'date_added': movie.date_added,
+            # TODO: fix manual time zone correction
+            'date_added': str(movie.date_added - timedelta(hours=8))[:-6],
             'length_minutes': movie.length_minutes,
             'path': movie.path,
         }
@@ -73,7 +74,8 @@ def search_media(request, movie_list, season_list):
             'season': season.season,
             'cut': season.cut,
             'resolution': season.resolution,
-            'date_added': season.date_added,
+            # TODO: fix manual time zone correction
+            'date_added': str(season.date_added - timedelta(hours=8))[:-6],
             'path': season.path,
         }
         data['seasons'].append(single_json)
