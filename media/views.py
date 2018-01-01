@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.utils import timezone
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -45,7 +46,8 @@ def search_media(request, movie_list, season_list):
             'release_year': movie.release_year,
             'cut': movie.cut,
             'resolution': movie.resolution,
-            'date_added': movie.date_added,
+            # TODO: fix manual time zone correction
+            'date_added': str(movie.date_added - timedelta(hours=8))[:-6],
             'length_minutes': movie.length_minutes,
             'path': movie.path,
         }
@@ -72,7 +74,8 @@ def search_media(request, movie_list, season_list):
             'season': season.season,
             'cut': season.cut,
             'resolution': season.resolution,
-            'date_added': season.date_added,
+            # TODO: fix manual time zone correction
+            'date_added': str(season.date_added - timedelta(hours=8))[:-6],
             'path': season.path,
         }
         data['seasons'].append(single_json)
@@ -123,6 +126,26 @@ def media_date_year(request, year):
 @api_view(['GET'])
 @authentication_classes((TokenAuthentication,))
 @permission_classes((IsAuthenticated,))
+def media_past_minutes(request, minutes):
+    oldest_date = datetime.today() - timedelta(minutes=minutes)
+    movies = Movie.objects.filter(date_added__gte=oldest_date)
+    seasons = Season.objects.filter(date_added__gte=oldest_date)
+    return JsonResponse(search_media(request, movies, seasons))
+
+
+@api_view(['GET'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def media_past_hours(request, hours):
+    oldest_date = datetime.today() - timedelta(hours=hours)
+    movies = Movie.objects.filter(date_added__gte=oldest_date)
+    seasons = Season.objects.filter(date_added__gte=oldest_date)
+    return JsonResponse(search_media(request, movies, seasons))
+
+
+@api_view(['GET'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
 def media_past_days(request, days):
     oldest_date = date.today() - timedelta(days=days)
     movies = Movie.objects.filter(date_added__gte=oldest_date)
@@ -164,13 +187,14 @@ def media_past_years(request, years):
 @authentication_classes((TokenAuthentication,))
 @permission_classes((IsAuthenticated,))
 def media_add_movie(request):
+
     form = MovieForm(request.POST)
     if form.is_valid():
         title = form.cleaned_data['title']
         release_year = form.cleaned_data['release_year']
         cut = form.cleaned_data['cut']
         resolution = form.cleaned_data['resolution']
-        date_added = date.today()
+        date_added = timezone.now()
         length_minutes = form.cleaned_data['length_minutes']
         path = form.cleaned_data['path']
 
@@ -203,7 +227,7 @@ def media_add_season(request):
         season = form.cleaned_data['season']
         cut = form.cleaned_data['cut']
         resolution = form.cleaned_data['resolution']
-        date_added = date.today()
+        date_added = timezone.now()
         path = form.cleaned_data['path']
 
         season = Season.objects.create(
