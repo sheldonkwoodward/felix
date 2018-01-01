@@ -16,7 +16,7 @@ class Movie(models.Model):
     release_year = models.IntegerField(blank=False)
     cut = models.CharField(max_length=250)
     resolution = models.CharField(max_length=250, blank=False)
-    date_added = models.DateField(blank=False)
+    date_added = models.DateTimeField(blank=False)
     length_minutes = models.IntegerField(blank=False)
     path = models.TextField(blank=False)
 
@@ -29,7 +29,7 @@ class Season(models.Model):
     season = models.IntegerField(blank=False)
     cut = models.CharField(max_length=250)
     resolution = models.CharField(max_length=250, blank=False)
-    date_added = models.DateField(blank=False)
+    date_added = models.DateTimeField(blank=False)
     path = models.TextField(blank=False)
 
     def __str__(self):

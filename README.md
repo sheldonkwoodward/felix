@@ -74,6 +74,12 @@ Returns all movies and seasons in the database that were added in \<month> \<yea
 #### GET /media/\<year>/\<month>/\<day>
 Returns all movies and seasons in the database that were added on \<day> \<month> \<year\>.
 
+#### GET /media/minutes/\<minutes>
+Returns all movies and seasons in the database that were added within the past \<minutes> minutes.
+
+#### GET /media/hours/\<hours>
+Returns all movies and seasons in the database that were added within the past \<hours> hours.
+
 #### GET /media/days/\<days>
 Returns all movies and seasons in the database that were added within the past \<days> days.
 
