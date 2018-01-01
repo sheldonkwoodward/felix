@@ -7,7 +7,7 @@ Felix is a Django web server for my personal use. As of v1.0 it provides an API 
 
 
 ## Installation Guide
-After cloning the repo, make the Django migrations:
+After cloning the repo, run the Django migrations:
 ```
 $ python manage.py migrate
 ```
