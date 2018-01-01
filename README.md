@@ -33,26 +33,26 @@ Media GET Requests return JSON objects in the following format:
     "season_num": NUMBER MATCHED SEASONS,
     "movies": [
         {
-            "id": 1,
-            "title": "Sample",
+            "id": ID,
+            "title": "TITLE",
             "release_year": YYYY,
-            "cut": "Extended",
-            "resolution": "1080p",
-            "date_added": "YYYY-MM-DD",
-            "length_minutes": 100,
-            "path": "/"
+            "cut": "CUT",
+            "resolution": "RESOLUTION",
+            "date_added": "YYYY-MM-DD HH:MM:SS.xxxxxx",
+            "length_minutes": MINUTES,
+            "path": "PATH"
         },
         ...
     ]
     "seasons": [
         {
-            "id": 1,
-            "title": "Sample",
-            "season": 1,
-            "cut": "None",
-            "resolution": "1080p",
+            "id": ID,
+            "title": "TITLE",
+            "season": SEASON,
+            "cut": "CUT",
+            "resolution": "RESOLUTION",
             "date_added": "YYYY-MM-DD",
-            "path": "/"
+            "path": "PATH"
         },
         ...
     ]
