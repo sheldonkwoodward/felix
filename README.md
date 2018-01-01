@@ -7,17 +7,21 @@ Felix is a Django web server for my personal use. As of v1.1 it provides an API 
 
 
 ## Installation Guide
-After cloning the repo, run the Django migrations:
+After cloning the repo, install the requirements:
 ```
-$ python manage.py migrate
+$ pip3 install -r requirements.txt
 ```
-This will create the default.db database. After the migrations have been made and the database has been created, a superuser needs to be created so an API token is generated:
+Now run the Django migrations:
 ```
-$ python manage.py createsuperuser
+$ python3 manage.py migrate
+```
+This will create the default.db database. After the migrations have been run and the database has been created, a superuser needs to be made so an API token is generated:
+```
+$ python3 manage.py createsuperuser
 ```
 After the migrations and users have been created the server is ready to run:
 ```
-$ python manage.py runserver
+$ python3 manage.py runserver
 ```
 
 
