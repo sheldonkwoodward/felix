@@ -127,7 +127,7 @@ def media_date_year(request, year):
 @authentication_classes((TokenAuthentication,))
 @permission_classes((IsAuthenticated,))
 def media_past_minutes(request, minutes):
-    oldest_date = datetime.today() - timedelta(minutes=minutes)
+    oldest_date = timezone.now() - timedelta(minutes=minutes)
     movies = Movie.objects.filter(date_added__gte=oldest_date)
     seasons = Season.objects.filter(date_added__gte=oldest_date)
     return JsonResponse(search_media(request, movies, seasons))
@@ -137,7 +137,7 @@ def media_past_minutes(request, minutes):
 @authentication_classes((TokenAuthentication,))
 @permission_classes((IsAuthenticated,))
 def media_past_hours(request, hours):
-    oldest_date = datetime.today() - timedelta(hours=hours)
+    oldest_date = timezone.now() - timedelta(hours=hours)
     movies = Movie.objects.filter(date_added__gte=oldest_date)
     seasons = Season.objects.filter(date_added__gte=oldest_date)
     return JsonResponse(search_media(request, movies, seasons))
