@@ -35,6 +35,7 @@ Media GET Requests return JSON objects in the following format:
     "time_stamp": "YYYY-MM-DD HH:MM:SS.xxxxxx",
     "movie_num": NUMBER MATCHED MOVIES,
     "season_num": NUMBER MATCHED SEASONS,
+    "episode_num": NUMBER MATCHED EPISODES,
     "movies": [
         {
             "id": ID,
@@ -47,7 +48,7 @@ Media GET Requests return JSON objects in the following format:
             "path": "PATH"
         },
         ...
-    ]
+    ],
     "seasons": [
         {
             "id": ID,
@@ -59,12 +60,25 @@ Media GET Requests return JSON objects in the following format:
             "path": "PATH"
         },
         ...
+    ],
+     "episodes": [
+        {
+            "id": ID,
+            "title": "TITLE",
+            "season": SEASON,
+            "episode": EPISODE,
+            "cut": "CUT",
+            "resolution": "RESOLUTION",
+            "date_added": "YYYY-MM-DD",
+            "path": "PATH"
+        },
+        ...
     ]
 }
 ```
 
 #### Query Parameters
-All media GET requests can include query parameters in the URL. The query parameters are <b>id</b>, <b>title</b>, <b>release_year</b>, <b>season</b>, <b>cut</b>, <b>resolution</b>, and <b>length_minutes</b>. These parameters are exclusively searched and will not match partially.
+All media GET requests can include query parameters in the URL. The query parameters are <b>id</b>, <b>title</b>, <b>release_year</b>, <b>season</b>, <b>episode</b>, <b>cut</b>, <b>resolution</b>, and <b>length_minutes</b>. These parameters are exclusively searched and will not match partially.
 
 #### GET /media/
 Returns all movies and seasons in the database.
@@ -110,3 +124,6 @@ Contains headers with data for the following keys: <b>title</b>, <b>release_year
 
 #### POST /media/add/season
 Contains headers with data for the following keys: <b>title</b>, <b>season</b>, <b>cut</b>, <b>resolution</b>, and <b>path</b>. This data will be added to the <b>media_season</b> table in <b>default.db</b> as a new media_season row.
+
+#### POST /media/add/season
+Contains headers with data for the following keys: <b>title</b>, <b>season</b>, <b>episode</b>, <b>cut</b>, <b>resolution</b>, and <b>path</b>. This data will be added to the <b>media_episode</b> table in <b>default.db</b> as a new media_episode row.
