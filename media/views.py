@@ -40,6 +40,8 @@ def search_media(request, movie_list, season_list, episode_list):
             continue
         elif request.GET.get('season') is not None:
             continue
+        elif request.GET.get('episode') is not None:
+            continue
 
         single_json = {
             'id': movie.id,
@@ -67,6 +69,8 @@ def search_media(request, movie_list, season_list, episode_list):
         elif request.GET.get('resolution') is not None and season.resolution not in request.GET.get('resolution'):
             continue
         elif request.GET.get('length_minutes') is not None:
+            continue
+        elif request.GET.get('episode') is not None:
             continue
 
         single_json = {
