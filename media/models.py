@@ -34,3 +34,16 @@ class Season(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Episode(models.Model):
+    title = models.CharField(max_length=250, blank=False)
+    season = models.IntegerField(blank=False)
+    episode = models.IntegerField(blank=False)
+    cut = models.CharField(max_length=250)
+    resolution = models.CharField(max_length=250, blank=False)
+    date_added = models.DateTimeField(blank=False)
+    path = models.TextField(blank=False)
+
+    def __str__(self):
+        return self.title
