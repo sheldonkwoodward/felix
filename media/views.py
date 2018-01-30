@@ -4,22 +4,23 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
 
-from media.models import Movie, Season
-from media.forms import MovieForm, SeasonForm
+from media.models import Movie, Season, Episode
+from media.forms import MovieForm, SeasonForm, EpisodeForm
 
 from datetime import datetime, date, timedelta
-
 
 TokenAuthentication.keyword = 'Bearer'
 
 
-def search_media(request, movie_list, season_list):
+def search_media(request, movie_list, season_list, episode_list):
     data = {
         "time_stamp": "2000-01-01 00:00:00.000000",
         "movie_num": 0,
         "season_num": 0,
+        "episode_num": 0,
         "movies": [],
-        "seasons": []
+        "seasons": [],
+        "episodes": [],
     }
 
     # find movies
@@ -80,10 +81,41 @@ def search_media(request, movie_list, season_list):
         }
         data['seasons'].append(single_json)
 
+    # find episodes
+    for episode in episode_list:
+        if request.GET.get('id') is not None and str(episode.id) != request.GET.get('id'):
+            continue
+        elif request.GET.get('title') is not None and episode.title not in request.GET.get('title'):
+            continue
+        elif request.GET.get('season') is not None and str(episode.season) != request.GET.get('season'):
+            continue
+        elif request.GET.get('episode') is not None and str(episode.episode) != request.GET.get('episode'):
+            continue
+        elif request.GET.get('cut') is not None and episode.cut not in request.GET.get('cut'):
+            continue
+        elif request.GET.get('resolution') is not None and episode.resolution not in request.GET.get('resolution'):
+            continue
+        elif request.GET.get('length_minutes') is not None:
+            continue
+
+        single_json = {
+            'id': episode.id,
+            'title': episode.title,
+            'season': episode.season,
+            'episode': episode.episode,
+            'cut': episode.cut,
+            'resolution': episode.resolution,
+            # TODO: fix manual time zone correction
+            'date_added': str(episode.date_added - timedelta(hours=8))[:-6],
+            'path': episode.path,
+        }
+        data['episodes'].append(single_json)
+
     # results info
     data['time_stamp'] = str(datetime.now())
     data['movie_num'] = len(data['movies'])
     data['season_num'] = len(data['seasons'])
+    data['episode_num'] = len(data['episodes'])
     return data
 
 
@@ -93,7 +125,8 @@ def search_media(request, movie_list, season_list):
 def media_all(request):
     movies = Movie.objects.all()
     seasons = Season.objects.all()
-    return JsonResponse(search_media(request, movies, seasons))
+    episodes = Episode.objects.all()
+    return JsonResponse(search_media(request, movies, seasons, episodes))
 
 
 @api_view(['GET'])
@@ -102,7 +135,8 @@ def media_all(request):
 def media_date_day(request, year, month, day):
     movies = Movie.objects.filter(date_added__year=year).filter(date_added__month=month).filter(date_added__day=day)
     seasons = Season.objects.filter(date_added__year=year).filter(date_added__month=month).filter(date_added__day=day)
-    return JsonResponse(search_media(request, movies, seasons))
+    episodes = Episode.objects.filter(date_added__year=year).filter(date_added__month=month).filter(date_added__day=day)
+    return JsonResponse(search_media(request, movies, seasons, episodes))
 
 
 @api_view(['GET'])
@@ -111,7 +145,8 @@ def media_date_day(request, year, month, day):
 def media_date_month(request, year, month):
     movies = Movie.objects.filter(date_added__year=year).filter(date_added__month=month)
     seasons = Season.objects.filter(date_added__year=year).filter(date_added__month=month)
-    return JsonResponse(search_media(request, movies, seasons))
+    episodes = Episode.objects.filter(date_added__year=year).filter(date_added__month=month)
+    return JsonResponse(search_media(request, movies, seasons, episodes))
 
 
 @api_view(['GET'])
@@ -120,7 +155,8 @@ def media_date_month(request, year, month):
 def media_date_year(request, year):
     movies = Movie.objects.filter(date_added__year=year)
     seasons = Season.objects.filter(date_added__year=year)
-    return JsonResponse(search_media(request, movies, seasons))
+    episodes = Episode.objects.filter(date_added__year=year)
+    return JsonResponse(search_media(request, movies, seasons, episodes))
 
 
 @api_view(['GET'])
@@ -130,7 +166,8 @@ def media_past_minutes(request, minutes):
     oldest_date = timezone.now() - timedelta(minutes=minutes)
     movies = Movie.objects.filter(date_added__gte=oldest_date)
     seasons = Season.objects.filter(date_added__gte=oldest_date)
-    return JsonResponse(search_media(request, movies, seasons))
+    episodes = Episode.objects.filter(date_added__gte=oldest_date)
+    return JsonResponse(search_media(request, movies, seasons, episodes))
 
 
 @api_view(['GET'])
@@ -140,7 +177,8 @@ def media_past_hours(request, hours):
     oldest_date = timezone.now() - timedelta(hours=hours)
     movies = Movie.objects.filter(date_added__gte=oldest_date)
     seasons = Season.objects.filter(date_added__gte=oldest_date)
-    return JsonResponse(search_media(request, movies, seasons))
+    episodes = Episode.objects.filter(date_added__gte=oldest_date)
+    return JsonResponse(search_media(request, movies, seasons, episodes))
 
 
 @api_view(['GET'])
@@ -150,7 +188,8 @@ def media_past_days(request, days):
     oldest_date = date.today() - timedelta(days=days)
     movies = Movie.objects.filter(date_added__gte=oldest_date)
     seasons = Season.objects.filter(date_added__gte=oldest_date)
-    return JsonResponse(search_media(request, movies, seasons))
+    episodes = Episode.objects.filter(date_added__gte=oldest_date)
+    return JsonResponse(search_media(request, movies, seasons, episodes))
 
 
 @api_view(['GET'])
@@ -160,7 +199,8 @@ def media_past_weeks(request, weeks):
     oldest_date = date.today() - timedelta(days=weeks * 7)
     movies = Movie.objects.filter(date_added__gte=oldest_date)
     seasons = Season.objects.filter(date_added__gte=oldest_date)
-    return JsonResponse(search_media(request, movies, seasons))
+    episodes = Episode.objects.filter(date_added__gte=oldest_date)
+    return JsonResponse(search_media(request, movies, seasons, episodes))
 
 
 @api_view(['GET'])
@@ -170,7 +210,8 @@ def media_past_months(request, months):
     oldest_date = date.today() - timedelta(days=months * 31)
     movies = Movie.objects.filter(date_added__gte=oldest_date)
     seasons = Season.objects.filter(date_added__gte=oldest_date)
-    return JsonResponse(search_media(request, movies, seasons))
+    episodes = Episode.objects.filter(date_added__gte=oldest_date)
+    return JsonResponse(search_media(request, movies, seasons, episodes))
 
 
 @api_view(['GET'])
@@ -180,14 +221,14 @@ def media_past_years(request, years):
     oldest_date = date.today() - timedelta(days=years * 365)
     movies = Movie.objects.filter(date_added__gte=oldest_date)
     seasons = Season.objects.filter(date_added__gte=oldest_date)
-    return JsonResponse(search_media(request, movies, seasons))
+    episodes = Episode.objects.filter(date_added__gte=oldest_date)
+    return JsonResponse(search_media(request, movies, seasons, episodes))
 
 
 @api_view(['POST'])
 @authentication_classes((TokenAuthentication,))
 @permission_classes((IsAuthenticated,))
 def media_add_movie(request):
-
     form = MovieForm(request.POST)
     if form.is_valid():
         title = form.cleaned_data['title']
@@ -239,6 +280,39 @@ def media_add_season(request):
             path=path,
         )
         season.save()
+        return JsonResponse({
+            'status': 'success'
+        })
+    else:
+        return JsonResponse({
+            'status': 'failed'
+        }, status=400)
+
+
+@api_view(['POST'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((IsAuthenticated,))
+def media_add_episode(request):
+    form = EpisodeForm(request.POST)
+    if form.is_valid():
+        title = form.cleaned_data['title']
+        season = form.cleaned_data['season']
+        episode = form.cleaned_data['episode']
+        cut = form.cleaned_data['cut']
+        resolution = form.cleaned_data['resolution']
+        date_added = timezone.now()
+        path = form.cleaned_data['path']
+
+        episode = Episode.objects.create(
+            title=title,
+            season=season,
+            episode=episode,
+            cut=cut,
+            resolution=resolution,
+            date_added=date_added,
+            path=path,
+        )
+        episode.save()
         return JsonResponse({
             'status': 'success'
         })

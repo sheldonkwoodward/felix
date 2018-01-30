@@ -16,3 +16,12 @@ class SeasonForm(forms.Form):
     cut = forms.CharField(max_length=250)
     resolution = forms.CharField(max_length=250)
     path = forms.CharField()
+
+
+class EpisodeForm(forms.Form):
+    title = forms.CharField(max_length=250)
+    season = forms.IntegerField()
+    episode = forms.IntegerField()
+    cut = forms.CharField(max_length=250)
+    resolution = forms.CharField(max_length=250)
+    path = forms.CharField()
