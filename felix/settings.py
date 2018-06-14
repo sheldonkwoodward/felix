@@ -78,6 +78,10 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'databases/default.db'),
     },
+    'wiki': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'databases/wiki.db'),
+        },
 }
 
 # Password validation
