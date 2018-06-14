@@ -88,9 +88,9 @@ DATABASES = {
     },
 }
 
-DATABASE_ROUTERS = ['media.MediaRouter.MediaRouter',
-                    'wiki.WikiRouter.WikiRouter',
-                    'felix.DefaultRouter.DefaultRouter']
+DATABASE_ROUTERS = ['media.router.MediaDatabaseRouter',
+                    'wiki.router.WikiDatabaseRouter',
+                    'felix.router.DefaultDatabaseRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
