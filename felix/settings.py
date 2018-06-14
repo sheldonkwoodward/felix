@@ -84,6 +84,8 @@ DATABASES = {
         },
 }
 
+DATABASE_ROUTERS = ['felix.WikiRouter']
+
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
