@@ -74,17 +74,23 @@ WSGI_APPLICATION = 'felix.wsgi.application'
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 DATABASES = {
+    'media': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'databases/media.db'),
+    },
+    'wiki': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'databases/wiki.db'),
+    },
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'databases/default.db'),
     },
-    'wiki': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'databases/wiki.db'),
-        },
 }
 
-DATABASE_ROUTERS = ['felix.WikiRouter']
+DATABASE_ROUTERS = ['media.MediaRouter.MediaRouter',
+                    'wiki.WikiRouter.WikiRouter',
+                    'felix.DefaultRouter.DefaultRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
